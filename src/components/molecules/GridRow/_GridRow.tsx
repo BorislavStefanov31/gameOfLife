@@ -1,16 +1,16 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, { FC } from 'react';
+import {View} from 'react-native';
 import { Cell } from '../../atoms';
+import styles from './_GridRowStyles';
 
-
-interface GridRowProps {
+interface IGridRowProps {
   row: number[];
   rowIndex: number;
   onCellToggle: (x: number, y: number) => void;
   isPlaying: boolean;
 }
 
-const GridRow: React.FC<GridRowProps> = ({
+const _GridRow: FC<IGridRowProps> = ({
   row,
   rowIndex,
   onCellToggle,
@@ -30,10 +30,4 @@ const GridRow: React.FC<GridRowProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-  },
-});
-
-export default GridRow;
+export default _GridRow;

@@ -1,5 +1,6 @@
-import React from 'react';
-import {TouchableOpacity, StyleSheet} from 'react-native';
+import React, { FC } from 'react';
+import {TouchableOpacity} from 'react-native';
+import styles from './_CellStyles';
 
 interface CellProps {
   isAlive: boolean;
@@ -7,7 +8,7 @@ interface CellProps {
   isPlaying: boolean;
 }
 
-const Cell: React.FC<CellProps> = ({isAlive, onPress, isPlaying}) => {
+const _Cell: FC<CellProps> = ({isAlive, onPress, isPlaying}) => {
   return (
     <TouchableOpacity
       style={[styles.cell, isAlive ? styles.liveCell : styles.deadCell]}
@@ -16,20 +17,4 @@ const Cell: React.FC<CellProps> = ({isAlive, onPress, isPlaying}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  cell: {
-    width: 15,
-    height: 15,
-    margin: 1,
-  },
-  liveCell: {
-    backgroundColor: 'black',
-  },
-  deadCell: {
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: 'gray',
-  },
-});
-
-export default Cell;
+export default _Cell;

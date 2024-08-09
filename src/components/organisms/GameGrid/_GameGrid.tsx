@@ -1,15 +1,22 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { FC } from 'react';
+import { View } from 'react-native';
 import { GridRow } from '../../molecules';
 import { Grid } from '../../../utils/gameOfLife';
+import styles from './_GameGridStyles';
 
-interface GameGridProps {
+interface IGameGridProps {
   grid: Grid;
   onCellToggle: (x: number, y: number) => void;
   isPlaying: boolean;
 }
 
-const GameGrid: React.FC<GameGridProps> = ({ grid, onCellToggle, isPlaying }) => {
+const _GameGrid: FC<IGameGridProps> = (props) => {
+  const {
+    grid,
+    onCellToggle,
+    isPlaying
+  } = props;
+
   return (
     <View style={styles.grid}>
       {grid.map((row, rowIndex) => (
@@ -25,10 +32,4 @@ const GameGrid: React.FC<GameGridProps> = ({ grid, onCellToggle, isPlaying }) =>
   );
 };
 
-const styles = StyleSheet.create({
-  grid: {
-    flexDirection: 'column',
-  },
-});
-
-export default GameGrid;
+export default _GameGrid;

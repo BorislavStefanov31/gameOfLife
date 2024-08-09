@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Button } from '../../atoms';
+import styles from './_ControlPanelStyles';
 
 interface IControlPanelProps {
   isPlaying: boolean;
@@ -8,7 +9,13 @@ interface IControlPanelProps {
   onStop: () => void;
 }
 
-const ControlPanel: FC<IControlPanelProps> = ({ isPlaying, onPlayPause, onStop }) => {
+const ControlPanel: FC<IControlPanelProps> = (props) => {
+  const {
+    isPlaying,
+    onPlayPause,
+    onStop
+  } = props
+
   return (
     <View style={styles.controlPanel}>
       <Button title={isPlaying ? "Pause" : "Play"} onPress={onPlayPause} />
@@ -16,13 +23,5 @@ const ControlPanel: FC<IControlPanelProps> = ({ isPlaying, onPlayPause, onStop }
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  controlPanel: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginVertical: 20,
-  },
-});
 
 export default ControlPanel;

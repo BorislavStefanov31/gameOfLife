@@ -1,12 +1,18 @@
-import React from 'react';
-import {Button, StyleSheet, View} from 'react-native';
+import React, { FC } from 'react';
+import { Button, View } from 'react-native';
+import styles from './_ButtonStyles';
 
-interface CustomButtonProps {
+interface ICustomButtonProps {
   title: string;
   onPress: () => void;
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({title, onPress}) => {
+const _CustomButton: FC<ICustomButtonProps> = (props) => {
+  const {
+    title,
+    onPress
+  } = props
+
   return (
     <View style={styles.buttonContainer}>
       <Button title={title} onPress={onPress} />
@@ -14,10 +20,4 @@ const CustomButton: React.FC<CustomButtonProps> = ({title, onPress}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  buttonContainer: {
-    marginHorizontal: 10,
-  },
-});
-
-export default CustomButton;
+export default _CustomButton;

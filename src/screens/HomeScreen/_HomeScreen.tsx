@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef, FC } from 'react';
+import { View } from 'react-native';
 import { GameGrid, ControlPanel } from '../../components/organisms';
 import { createEmptyGrid, getNextGeneration, Grid } from '../../utils/gameOfLife';
+import styles from './_HomeScreenStyles';
 
 const GRID_SIZE = 20;
 
-const HomeScreen: React.FC = () => {
+const _HomeScreen: FC = () => {
   const [grid, setGrid] = useState<Grid>(() => createEmptyGrid(GRID_SIZE));
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -51,12 +52,4 @@ const HomeScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default HomeScreen;
+export default _HomeScreen;
