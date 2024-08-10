@@ -7,14 +7,12 @@ import styles from './_GameGridStyles';
 interface IGameGridProps {
   grid: Grid;
   onCellToggle: (x: number, y: number) => void;
-  isPlaying: boolean;
 }
 
 const _GameGrid: FC<IGameGridProps> = (props) => {
   const {
     grid,
     onCellToggle,
-    isPlaying
   } = props;
 
   return (
@@ -25,7 +23,6 @@ const _GameGrid: FC<IGameGridProps> = (props) => {
           row={row}
           rowIndex={rowIndex}
           onCellToggle={onCellToggle}
-          isPlaying={isPlaying}
         />
       ))}
     </View>

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createEmptyGrid, Grid } from '../utils/gameOfLife';
-import { hasOnes } from '../utils/hasOnes';
 
 const GRID_STATE_KEY = 'GRID_STATE';
 const GRID_SIZE = 20;
@@ -10,6 +9,8 @@ const GRID_SIZE = 20;
 const usePersistentGrid = () => {
   const [grid, setGrid] = useState<Grid>(() => createEmptyGrid(GRID_SIZE));
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [hasTheGameStarted, setHasTheGameStarted] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState);
 
   const saveGridState = async (currentGrid: Grid) => {
@@ -33,11 +34,13 @@ const usePersistentGrid = () => {
 
   const handleRestoreGrid = () => {
     loadGridState();
+    setHasTheGameStarted(true)
     setIsModalVisible(false);
   };
 
   const handleNewGrid = () => {
     setGrid(createEmptyGrid(GRID_SIZE));
+    setHasTheGameStarted(false)
     setIsModalVisible(false);
   };
 
@@ -47,9 +50,7 @@ const usePersistentGrid = () => {
         const savedGrid = await AsyncStorage.getItem(GRID_STATE_KEY);
         if (savedGrid) {
           const parsedGrid = JSON.parse(savedGrid);
-          if (hasOnes(parsedGrid)) {
             setIsModalVisible(true);
-          }
         }
       } else if (nextAppState.match(/inactive|background/)) {
         saveGridState(grid);
@@ -71,6 +72,10 @@ const usePersistentGrid = () => {
     setIsModalVisible,
     handleRestoreGrid,
     handleNewGrid,
+    setHasTheGameStarted,
+    hasTheGameStarted,
+    setIsPlaying,
+    isPlaying
   };
 };
 

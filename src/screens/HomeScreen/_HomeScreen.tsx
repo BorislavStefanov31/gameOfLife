@@ -14,27 +14,37 @@ const _HomeScreen: FC = () => {
     isModalVisible,
     handleRestoreGrid,
     handleNewGrid,
+    setHasTheGameStarted,
+    hasTheGameStarted,
+    setIsPlaying,
+    isPlaying
   } = usePersistentGrid();
-  
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleCellToggle = useCallback((x: number, y: number) => {
-    setGrid(prevGrid => {
-      const newGrid = prevGrid.map(row => [...row]);
-      newGrid[x][y] = prevGrid[x][y] === 1 ? 0 : 1;
-      return newGrid;
-    });
-  }, [setGrid]);
+
+    if (!isPlaying && !hasTheGameStarted) {
+      setGrid(prevGrid => {
+        const newGrid = prevGrid.map(row => [...row]);
+        newGrid[x][y] = prevGrid[x][y] === 1 ? 0 : 1;
+        return newGrid;
+      });
+    }
+  }, [setGrid, hasTheGameStarted, isPlaying]);
 
   const handlePlayPause = useCallback(() => {
     setIsPlaying(prev => !prev);
-  }, []);
+    if (!hasTheGameStarted) {
+    setHasTheGameStarted(true);
+    }
+  }, [setIsPlaying, setHasTheGameStarted, hasTheGameStarted]);
 
   const handleStop = useCallback(() => {
     setIsPlaying(false);
+    setHasTheGameStarted(false);
     setGrid(createEmptyGrid(GRID_SIZE));
-  }, [setGrid, setIsPlaying]);
+  }, [setGrid, setIsPlaying, setGrid]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -50,12 +60,20 @@ const _HomeScreen: FC = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isPlaying, setGrid]);
+  }, [isPlaying]);
 
   return (
     <View style={styles.container}>
-      <GameGrid grid={grid} onCellToggle={handleCellToggle} isPlaying={isPlaying} />
-      <ControlPanel isPlaying={isPlaying} onPlayPause={handlePlayPause} onStop={handleStop} />
+      <GameGrid
+        grid={grid}
+        onCellToggle={handleCellToggle}
+      />
+      <ControlPanel
+        isPlaying={isPlaying}
+        onPlayPause={handlePlayPause}
+        onStop={handleStop}
+        hasTheGameStarted={hasTheGameStarted}
+      />
       <RestoreModal
         isVisible={isModalVisible}
         onRestore={handleRestoreGrid}

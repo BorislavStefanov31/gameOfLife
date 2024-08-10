@@ -1,10 +1,12 @@
 export type Cell = 0 | 1;
 export type Grid = Cell[][];
 
+// Creates an empty grid based on the size param
 export const createEmptyGrid = (size: number): Grid => {
   return Array.from({ length: size }, () => Array(size).fill(0));
 };
 
+// Compute the next generation based on these rules https://rustwasm.github.io/book/game-of-life/rules.html
 export const getNextGeneration = (grid: Grid): Grid => {
   const size = grid.length;
   const newGrid = createEmptyGrid(size);

@@ -5,19 +5,12 @@ import styles from './_CellStyles';
 interface CellProps {
   isAlive: boolean;
   onPress: () => void;
-  isPlaying: boolean;
 }
 
-const _Cell: FC<CellProps> = ({ isAlive, onPress, isPlaying }) => {
+const _Cell: FC<CellProps> = ({ isAlive, onPress }) => {
   const cellStyle = useMemo(() => {
     return [styles.cell, isAlive ? styles.liveCell : styles.deadCell];
   }, [isAlive]);
-
-  const handlePress = useCallback(() => {
-    if (!isPlaying) {
-      onPress();
-    }
-  }, [isPlaying]);
 
   return (
     <Pressable
@@ -25,7 +18,7 @@ const _Cell: FC<CellProps> = ({ isAlive, onPress, isPlaying }) => {
         ...cellStyle,
         pressed && localStyles.pressedCell
       ]}
-      onPress={handlePress}
+      onPress={onPress}
     />
   );
 };

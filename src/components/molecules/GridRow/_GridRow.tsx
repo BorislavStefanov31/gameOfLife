@@ -7,7 +7,6 @@ interface IGridRowProps {
   row: number[];
   rowIndex: number;
   onCellToggle: (x: number, y: number) => void;
-  isPlaying: boolean;
 }
 
 const _GridRow: FC<IGridRowProps> = (props) => {
@@ -15,7 +14,6 @@ const _GridRow: FC<IGridRowProps> = (props) => {
     row,
     rowIndex,
     onCellToggle,
-    isPlaying,
   } = props;
 
   return (
@@ -25,7 +23,6 @@ const _GridRow: FC<IGridRowProps> = (props) => {
           key={`${rowIndex}-${colIndex}`}
           isAlive={cell === 1}
           onPress={() => onCellToggle(rowIndex, colIndex)}
-          isPlaying={isPlaying}
         />
       ))}
     </View>
