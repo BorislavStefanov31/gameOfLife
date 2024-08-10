@@ -1,13 +1,21 @@
 import React, { useState, useEffect, useRef, useCallback, FC } from 'react';
 import { View } from 'react-native';
-import { GameGrid, ControlPanel } from '../../components/organisms';
-import { createEmptyGrid, getNextGeneration, Grid } from '../../utils/gameOfLife';
+import { GameGrid, ControlPanel, RestoreModal } from '../../components/organisms';
+import { createEmptyGrid, getNextGeneration } from '../../utils/gameOfLife';
+import usePersistentGrid from '../../hooks/usePersistentGrid';
 import styles from './_HomeScreenStyles';
 
 const GRID_SIZE = 20;
 
 const _HomeScreen: FC = () => {
-  const [grid, setGrid] = useState<Grid>(() => createEmptyGrid(GRID_SIZE));
+  const {
+    grid,
+    setGrid,
+    isModalVisible,
+    handleRestoreGrid,
+    handleNewGrid,
+  } = usePersistentGrid();
+  
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -17,7 +25,7 @@ const _HomeScreen: FC = () => {
       newGrid[x][y] = prevGrid[x][y] === 1 ? 0 : 1;
       return newGrid;
     });
-  }, []);
+  }, [setGrid]);
 
   const handlePlayPause = useCallback(() => {
     setIsPlaying(prev => !prev);
@@ -26,7 +34,7 @@ const _HomeScreen: FC = () => {
   const handleStop = useCallback(() => {
     setIsPlaying(false);
     setGrid(createEmptyGrid(GRID_SIZE));
-  }, []);
+  }, [setGrid, setIsPlaying]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -42,13 +50,17 @@ const _HomeScreen: FC = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isPlaying]);
-
+  }, [isPlaying, setGrid]);
 
   return (
     <View style={styles.container}>
       <GameGrid grid={grid} onCellToggle={handleCellToggle} isPlaying={isPlaying} />
       <ControlPanel isPlaying={isPlaying} onPlayPause={handlePlayPause} onStop={handleStop} />
+      <RestoreModal
+        isVisible={isModalVisible}
+        onRestore={handleRestoreGrid}
+        onNew={handleNewGrid}
+      />
     </View>
   );
 };
