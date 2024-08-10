@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import styles from './_CellStyles';
 

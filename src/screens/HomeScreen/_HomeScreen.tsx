@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, FC } from 'react';
+import React, { useEffect, useRef, useCallback, FC } from 'react';
 import { View } from 'react-native';
 import { GameGrid, ControlPanel, RestoreModal } from '../../components/organisms';
 import { createEmptyGrid, getNextGeneration } from '../../utils/gameOfLife';

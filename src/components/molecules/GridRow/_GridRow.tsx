@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 import { View } from 'react-native';
 import { Cell } from '../../atoms';
 import styles from './_GridRowStyles';
