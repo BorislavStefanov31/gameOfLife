@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createEmptyGrid, Grid } from '../utils/gameOfLife';
+import { hasOnes } from '../utils/hasOnes';
 
 const GRID_STATE_KEY = 'GRID_STATE';
 const GRID_SIZE = 20;
@@ -41,9 +42,15 @@ const usePersistentGrid = () => {
   };
 
   useEffect(() => {
-    const handleAppStateChange = (nextAppState: AppStateStatus) => {
+    const handleAppStateChange = async (nextAppState: AppStateStatus) => {
       if (appState.match(/inactive|background/) && nextAppState === 'active') {
-        setIsModalVisible(true);
+        const savedGrid = await AsyncStorage.getItem(GRID_STATE_KEY);
+        if (savedGrid) {
+          const parsedGrid = JSON.parse(savedGrid);
+          if (hasOnes(parsedGrid)) {
+            setIsModalVisible(true);
+          }
+        }
       } else if (nextAppState.match(/inactive|background/)) {
         saveGridState(grid);
       }
