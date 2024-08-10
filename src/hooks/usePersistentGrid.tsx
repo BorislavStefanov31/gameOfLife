@@ -51,7 +51,7 @@ const usePersistentGrid = () => {
 
   useEffect(() => {
     const handleAppStateChange = async (nextAppState: AppStateStatus) => {
-      if (appState.match(/inactive|background/) && nextAppState === 'active') {
+      if (nextAppState === 'active') {
         const savedGrid = await AsyncStorage.getItem(GRID_STATE_KEY);
         const savedGameStarted = await AsyncStorage.getItem(GAME_STARTED_KEY);
         if (savedGrid && savedGameStarted && JSON.parse(savedGameStarted)) {

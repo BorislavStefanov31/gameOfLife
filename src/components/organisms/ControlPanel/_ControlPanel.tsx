@@ -29,7 +29,7 @@ const ControlPanel: FC<IControlPanelProps> = (props) => {
     <View style={styles.controlPanel}>
       <Button title={playPauseTitle} onPress={onPlayPause} />
       {showPausedText && (
-        <Text style={{ alignSelf: 'center' }}>The game is paused</Text>
+        <Text style={{ alignSelf: 'center', color:'black' }}>The game is paused</Text>
       )}
       <Button title="Stop" onPress={onStop} />
     </View>

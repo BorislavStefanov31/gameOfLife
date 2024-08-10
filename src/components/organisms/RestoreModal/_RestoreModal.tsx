@@ -14,8 +14,8 @@ const _RestoreModal: FC<RestoreModalProps> = ({ isVisible, onRestore, onNew }) =
   return (
     <Modal isVisible={isVisible} animationIn="slideInUp" animationOut="slideOutDown">
       <View style={styles.modalContent}>
-        <Text>Do you want to restore your previous grid or start a new one?</Text>
-        <Button title="Restore" onPress={onRestore} />
+        <Text style={{color:'black'}}>Do you want to continue with your previous grid or start a new one?</Text>
+        <Button title="Continue" onPress={onRestore} />
         <Button title="New" onPress={onNew} />
       </View>
     </Modal>
