@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, FC } from 'react';
+import React, { useState, useEffect, useRef, useCallback, FC } from 'react';
 import { View } from 'react-native';
 import { GameGrid, ControlPanel } from '../../components/organisms';
 import { createEmptyGrid, getNextGeneration, Grid } from '../../utils/gameOfLife';
@@ -11,11 +11,28 @@ const _HomeScreen: FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  const handleCellToggle = useCallback((x: number, y: number) => {
+    setGrid(prevGrid => {
+      const newGrid = prevGrid.map(row => [...row]);
+      newGrid[x][y] = prevGrid[x][y] === 1 ? 0 : 1;
+      return newGrid;
+    });
+  }, []);
+
+  const handlePlayPause = useCallback(() => {
+    setIsPlaying(prev => !prev);
+  }, []);
+
+  const handleStop = useCallback(() => {
+    setIsPlaying(false);
+    setGrid(createEmptyGrid(GRID_SIZE));
+  }, []);
+
   useEffect(() => {
     if (isPlaying) {
       intervalRef.current = setInterval(() => {
         setGrid(prevGrid => getNextGeneration(prevGrid));
-      }, 500);
+      }, 200);
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -27,22 +44,6 @@ const _HomeScreen: FC = () => {
     };
   }, [isPlaying]);
 
-  const handleCellToggle = (x: number, y: number) => {
-    setGrid(prevGrid => {
-      const newGrid = prevGrid.map(row => [...row]);
-      newGrid[x][y] = prevGrid[x][y] === 1 ? 0 : 1;
-      return newGrid;
-    });
-  };
-
-  const handlePlayPause = () => {
-    setIsPlaying(prev => !prev);
-  };
-
-  const handleStop = () => {
-    setIsPlaying(false);
-    setGrid(createEmptyGrid(GRID_SIZE));
-  };
 
   return (
     <View style={styles.container}>

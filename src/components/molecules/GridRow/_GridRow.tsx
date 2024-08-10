@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import {View} from 'react-native';
+import React, { FC, useCallback } from 'react';
+import { View } from 'react-native';
 import { Cell } from '../../atoms';
 import styles from './_GridRowStyles';
 
@@ -10,17 +10,19 @@ interface IGridRowProps {
   isPlaying: boolean;
 }
 
-const _GridRow: FC<IGridRowProps> = ({
-  row,
-  rowIndex,
-  onCellToggle,
-  isPlaying,
-}) => {
+const _GridRow: FC<IGridRowProps> = (props) => {
+  const {
+    row,
+    rowIndex,
+    onCellToggle,
+    isPlaying,
+  } = props;
+
   return (
     <View style={styles.row}>
       {row.map((cell, colIndex) => (
         <Cell
-          key={colIndex}
+          key={`${rowIndex}-${colIndex}`}
           isAlive={cell === 1}
           onPress={() => onCellToggle(rowIndex, colIndex)}
           isPlaying={isPlaying}

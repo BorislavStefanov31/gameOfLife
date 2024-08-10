@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { View } from 'react-native';
 import { Button } from '../../atoms';
 import styles from './_ControlPanelStyles';
@@ -14,11 +14,13 @@ const ControlPanel: FC<IControlPanelProps> = (props) => {
     isPlaying,
     onPlayPause,
     onStop
-  } = props
+  } = props;
+
+  const playPauseTitle = useMemo(() => (isPlaying ? "Pause" : "Play"), [isPlaying]);
 
   return (
     <View style={styles.controlPanel}>
-      <Button title={isPlaying ? "Pause" : "Play"} onPress={onPlayPause} />
+      <Button title={playPauseTitle} onPress={onPlayPause} />
       <Button title="Stop" onPress={onStop} />
     </View>
   );
