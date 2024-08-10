@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createEmptyGrid, Grid } from '../utils/gameOfLife';
 
 const GRID_STATE_KEY = 'GRID_STATE';
+const GAME_STARTED_KEY = 'GAME_STARTED';
 const GRID_SIZE = 20;
 
 const usePersistentGrid = () => {
@@ -13,9 +14,10 @@ const usePersistentGrid = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState);
 
-  const saveGridState = async (currentGrid: Grid) => {
+  const saveGridState = async (currentGrid: Grid, gameStarted: boolean) => {
     try {
       await AsyncStorage.setItem(GRID_STATE_KEY, JSON.stringify(currentGrid));
+      await AsyncStorage.setItem(GAME_STARTED_KEY, JSON.stringify(gameStarted));
     } catch (error) {
       console.error('Failed to save grid state', error);
     }
@@ -24,8 +26,12 @@ const usePersistentGrid = () => {
   const loadGridState = async () => {
     try {
       const savedGrid = await AsyncStorage.getItem(GRID_STATE_KEY);
+      const savedGameStarted = await AsyncStorage.getItem(GAME_STARTED_KEY);
       if (savedGrid) {
         setGrid(JSON.parse(savedGrid));
+      }
+      if (savedGameStarted) {
+        setHasTheGameStarted(JSON.parse(savedGameStarted));
       }
     } catch (error) {
       console.error('Failed to load grid state', error);
@@ -34,13 +40,12 @@ const usePersistentGrid = () => {
 
   const handleRestoreGrid = () => {
     loadGridState();
-    setHasTheGameStarted(true)
     setIsModalVisible(false);
   };
 
   const handleNewGrid = () => {
     setGrid(createEmptyGrid(GRID_SIZE));
-    setHasTheGameStarted(false)
+    setHasTheGameStarted(false);
     setIsModalVisible(false);
   };
 
@@ -48,12 +53,13 @@ const usePersistentGrid = () => {
     const handleAppStateChange = async (nextAppState: AppStateStatus) => {
       if (appState.match(/inactive|background/) && nextAppState === 'active') {
         const savedGrid = await AsyncStorage.getItem(GRID_STATE_KEY);
-        if (savedGrid) {
-          const parsedGrid = JSON.parse(savedGrid);
-            setIsModalVisible(true);
+        const savedGameStarted = await AsyncStorage.getItem(GAME_STARTED_KEY);
+        if (savedGrid && savedGameStarted && JSON.parse(savedGameStarted)) {
+          setIsModalVisible(true);
         }
       } else if (nextAppState.match(/inactive|background/)) {
-        saveGridState(grid);
+        setIsPlaying(false)
+        saveGridState(grid, hasTheGameStarted);
       }
       setAppState(nextAppState);
     };
@@ -63,7 +69,7 @@ const usePersistentGrid = () => {
     return () => {
       subscription.remove();
     };
-  }, [appState, grid, saveGridState]);
+  }, [appState, grid, hasTheGameStarted, saveGridState]);
 
   return {
     grid,
